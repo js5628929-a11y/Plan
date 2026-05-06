@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="J·STACK">
+<title>J·STACK</title>
+<style>
+:root {
+  --F:  -apple-system,"SF Pro Display",BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  --FM: ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+
+–bg:  #08070c;
+–s1:  #100f16;
+–s2:  #17151f;
+–s3:  #201d2a;
+–b1:  #272335;
+–b2:  #342f45;
+
+–a:   #f0a030;   /* amber — main */
+–a2:  #c07c18;
+–ag:  rgba(240,160,48,.12);
+–af:  rgba(240,160,48,.05);
+
+–c:   #00d4c8;   /* cyan — secondary */
+–cg:  rgba(0,212,200,.10);
+
+–pu:  #a78bfa;   /* purple */
+–co:  #f97066;   /* coral */
+–gr:  #4ade80;   /* green — success */
+
+–tx:  #ede8f5;
+–t2:  #9990b0;
+–mu:  #524a6a;
+–fa:  #0b0a10;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+background:var(–bg);color:var(–tx);
+font-family:var(–F);font-size:15px;line-height:1.65;
+overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+body::after{display:none!important;
+content:’’;position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.3;
+background-image:url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘200’ height=‘200’%3E%3Cfilter id=‘n’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=’.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘200’ height=‘200’ filter=‘url(%23n)’ opacity=’.07’/%3E%3C/svg%3E”);
+}
+
+/* ── NAV ── */
+.nav{
+position:sticky;top:0;z-index:500;
+background:rgba(8,7,12,.92);
+backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+border-bottom:1px solid var(–b1);
+display:flex;align-items:center;padding:0 18px;
+overflow-x:auto;gap:0;
+-webkit-overflow-scrolling:touch;
+}
+.nav::-webkit-scrollbar{display:none}
+.nav-logo{
+font-family:var(–F);font-weight:900;font-size:16px;letter-spacing:-.5px;
+color:var(–a);margin-right:18px;padding:13px 0;white-space:nowrap;flex-shrink:0;
+}
+.nav a{
+font-family:var(–FM);font-size:9.5px;font-weight:700;color:var(–mu);
+text-decoration:none;padding:14px 10px;border-bottom:2px solid transparent;
+white-space:nowrap;letter-spacing:1px;text-transform:uppercase;transition:.2s;
+}
+.nav a:hover,.nav a.active{color:var(–a);border-color:var(–a)}
+.nav a.cl{color:var(–c)!important}
+.nav a.cl:hover,.nav a.cl.active{border-color:var(–c)!important}
+
+/* ── HERO ── */
+.hero{
+position:relative;overflow:hidden;
+padding:60px 20px 52px;border-bottom:1px solid var(–b1);
+}
+.hero-bg{
+position:absolute;inset:0;pointer-events:none;
+background:
+radial-gradient(ellipse 70% 60% at 85% 10%,rgba(240,160,48,.08) 0%,transparent 55%),
+radial-gradient(ellipse 50% 50% at 5% 90%,rgba(0,212,200,.05) 0%,transparent 50%);
+}
+.hero-lines{
+position:absolute;inset:0;pointer-events:none;
+background-image:linear-gradient(rgba(39,35,53,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(39,35,53,.35) 1px,transparent 1px);
+background-size:44px 44px;
+mask-image:radial-gradient(ellipse 85% 85% at 50% 50%,black 5%,transparent 70%);
+-webkit-mask-image:radial-gradient(ellipse 85% 85% at 50% 50%,black 5%,transparent 70%);
+}
+.hero-inner{position:relative;max-width:700px;margin:0 auto}
+.hero-tag{
+display:inline-flex;align-items:center;gap:7px;
+font-family:var(–FM);font-size:10px;font-weight:700;
+color:var(–a);letter-spacing:2px;text-transform:uppercase;margin-bottom:18px;
+}
+.pulse{
+width:6px;height:6px;border-radius:50%;
+background:var(–a);box-shadow:0 0 8px var(–a);
+animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.55)}}
+.hero h1{
+font-family:var(–F);font-weight:900;
+font-size:clamp(54px,16vw,108px);
+line-height:.86;letter-spacing:-4px;margin-bottom:4px;
+}
+.hero h1 em{
+font-style:normal;
+background:linear-gradient(135deg,var(–a) 0%,#ffcc70 50%,var(–c) 100%);
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{font-size:14px;color:var(–t2);max-width:420px;margin:16px 0 32px;line-height:1.6}
+.hero-stats{
+display:grid;grid-template-columns:repeat(5,1fr);
+border:1px solid var(–b1);border-radius:14px;overflow:hidden;background:var(–s1);
+}
+.hs{padding:14px 12px;border-right:1px solid var(–b1);transition:.2s}
+.hs:last-child{border-right:none}
+.hs:hover{background:var(–s2)}
+.hs-v{font-family:var(–F);font-weight:900;font-size:20px;color:var(–a);line-height:1;letter-spacing:-.5px}
+.hs-v sup{font-size:10px;color:var(–t2);font-weight:500;margin-left:1px}
+.hs-l{font-family:var(–FM);font-size:8px;color:var(–mu);text-transform:uppercase;letter-spacing:1.2px;margin-top:3px}
+@media(max-width:480px){
+.hero-stats{grid-template-columns:repeat(3,1fr)}
+.hs:nth-child(3){border-right:none}
+.hs:nth-child(4){border-top:1px solid var(–b1)}
+.hs:nth-child(5){border-top:1px solid var(–b1);border-right:none}
+}
+
+/* ── LAYOUT ── */
+.wrap{max-width:760px;margin:0 auto;padding:0 18px}
+section{padding:56px 0;border-bottom:1px solid var(–b1)}
+
+.sh{display:flex;align-items:flex-end;gap:11px;margin-bottom:32px;padding-bottom:12px;border-bottom:1px solid var(–b1);position:relative}
+.sh::after{content:’’;position:absolute;bottom:-1px;left:0;width:44px;height:2px;background:var(–a);border-radius:2px}
+.sh.c::after{background:var(–c)}
+.sn{font-family:var(–FM);font-size:10px;color:var(–mu);letter-spacing:2px;padding-bottom:3px}
+.st{font-family:var(–F);font-weight:900;font-size:clamp(22px,5.5vw,34px);letter-spacing:-1px;line-height:1}
+.ac{color:var(–a)}.acc{color:var(–c)}.acp{color:var(–pu)}.aco{color:#f97066}
+
+/* ── CARDS ── */
+.card{background:var(–s1);border:1px solid var(–b1);border-radius:13px;overflow:hidden}
+.card-hd{padding:13px 16px;background:var(–s2);border-bottom:1px solid var(–b1);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-family:var(–F);font-weight:800;font-size:13px;letter-spacing:-.3px}
+.card-sub{font-family:var(–FM);font-size:9px;color:var(–mu);letter-spacing:1px;text-transform:uppercase}
+
+/* ── CALLOUT ── */
+.callout{display:flex;gap:10px;align-items:flex-start;padding:12px 15px;border-radius:10px;font-size:13px;line-height:1.55;margin:13px 0}
+.callout.a{background:rgba(240,160,48,.04);border:1px solid rgba(240,160,48,.15)}
+.callout.c{background:rgba(0,212,200,.04);border:1px solid rgba(0,212,200,.15)}
+.callout.w{background:rgba(249,112,102,.04);border:1px solid rgba(249,112,102,.15)}
+.ci{font-size:15px;flex-shrink:0;margin-top:1px}
+.callout strong{color:var(–tx)}
+.callout p{color:var(–t2);margin-top:1px}
+
+/* ════════════════════════════
+DASHBOARD
+════════════════════════════ */
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.dash-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:420px){.dash-grid,.dash-grid-3{grid-template-columns:1fr}}
+
+/* Progress Ring */
+.ring-card{background:var(–s1);border:1px solid var(–b1);border-radius:13px;padding:20px;display:flex;align-items:center;gap:18px;cursor:pointer;transition:.2s}
+.ring-card:hover{border-color:var(–b2)}
+.ring-wrap{position:relative;width:72px;height:72px;flex-shrink:0}
+.ring-svg{width:72px;height:72px;transform:rotate(-90deg)}
+.ring-bg{fill:none;stroke:var(–b2);stroke-width:6}
+.ring-fg{fill:none;stroke:var(–a);stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .6s ease}
+.ring-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-pct{font-family:var(–F);font-weight:900;font-size:16px;color:var(–a);line-height:1;letter-spacing:-.5px}
+.ring-sub{font-family:var(–FM);font-size:7px;color:var(–mu);letter-spacing:.5px;text-transform:uppercase}
+.ring-info{}
+.ring-days{font-family:var(–F);font-weight:900;font-size:26px;color:var(–tx);letter-spacing:-1px;line-height:1}
+.ring-desc{font-size:11px;color:var(–t2);margin-top:3px}
+.ring-start{font-family:var(–FM);font-size:9px;color:var(–mu);margin-top:6px;letter-spacing:.5px}
+
+/* Streak */
+.streak-card{background:var(–s1);border:1px solid var(–b1);border-radius:13px;padding:18px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.streak-card::before{content:’’;position:absolute;inset:0;background:linear-gradient(135deg,rgba(240,160,48,.05) 0%,transparent 60%);pointer-events:none}
+.streak-card:hover{border-color:var(–b2)}
+.streak-num{font-family:var(–F);font-weight:900;font-size:44px;color:var(–a);line-height:1;letter-spacing:-2px}
+.streak-fire{font-size:32px;position:absolute;top:14px;right:16px}
+.streak-label{font-family:var(–FM);font-size:9px;color:var(–mu);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.streak-dots{display:flex;gap:4px;margin-top:10px;flex-wrap:wrap}
+.s-dot{width:10px;height:10px;border-radius:50%;background:var(–b2);transition:.2s}
+.s-dot.on{background:var(–a);box-shadow:0 0 6px rgba(240,160,48,.4)}
+.s-dot.today{background:var(–a);box-shadow:0 0 10px rgba(240,160,48,.6);transform:scale(1.2)}
+
+/* Skin Cycling */
+.cycle-card{background:var(–s1);border:1px solid var(–b1);border-radius:13px;padding:18px;transition:.2s}
+.cycle-card:hover{border-color:var(–b2)}
+.cycle-nights{display:flex;gap:8px;margin-top:12px}
+.cycle-night{
+flex:1;padding:10px 6px;border-radius:9px;text-align:center;cursor:pointer;
+border:2px solid var(–b1);background:var(–s2);transition:.2s;
+-webkit-tap-highlight-color:transparent;
+}
+.cycle-night:hover{border-color:var(–b2)}
+.cycle-night.active-r{border-color:var(–a);background:rgba(240,160,48,.08)}
+.cycle-night.active-b{border-color:var(–pu);background:rgba(167,139,250,.08)}
+.cn-num{font-family:var(–F);font-weight:900;font-size:18px;line-height:1}
+.cn-num.r{color:var(–a)}
+.cn-num.b{color:var(–pu)}
+.cn-label{font-family:var(–FM);font-size:8px;color:var(–mu);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.cycle-info{margin-top:10px;font-size:12px;color:var(–t2);text-align:center}
+
+/* ════════════════════════════
+DAILY CHECKLIST
+════════════════════════════ */
+.checklist{display:flex;flex-direction:column;gap:6px}
+.chk-item{
+display:flex;align-items:center;gap:12px;
+padding:12px 14px;border-radius:10px;
+background:var(–s1);border:1px solid var(–b1);
+cursor:pointer;transition:.2s;-webkit-tap-highlight-color:transparent;
+user-select:none;
+}
+.chk-item:hover{border-color:var(–b2)}
+.chk-item.done{background:rgba(240,160,48,.04);border-color:rgba(240,160,48,.2)}
+.chk-box{
+width:22px;height:22px;border-radius:7px;flex-shrink:0;
+border:2px solid var(–b2);background:var(–s2);
+display:flex;align-items:center;justify-content:center;
+font-size:12px;transition:.2s;
+}
+.chk-item.done .chk-box{background:var(–a);border-color:var(–a);color:var(–bg)}
+.chk-text{flex:1}
+.chk-title{font-size:13px;font-weight:600;color:var(–tx);transition:.2s}
+.chk-item.done .chk-title{color:var(–mu);text-decoration:line-through}
+.chk-sub{font-size:11px;color:var(–mu);margin-top:1px}
+.chk-time{font-family:var(–FM);font-size:9px;color:var(–mu);letter-spacing:.5px;flex-shrink:0}
+.chk-reset{
+font-family:var(–FM);font-size:9px;color:var(–mu);
+background:transparent;border:1px solid var(–b1);border-radius:6px;
+padding:4px 10px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;transition:.2s;
+}
+.chk-reset:hover{color:var(–a);border-color:rgba(240,160,48,.3)}
+.chk-progress{height:3px;background:var(–b1);border-radius:3px;margin:12px 0 16px;overflow:hidden}
+.chk-bar{height:100%;background:var(–a);border-radius:3px;transition:width .4s ease;width:0%}
+
+/* ════════════════════════════
+WEIGHT TRACKER
+════════════════════════════ */
+.weight-input-row{display:flex;gap:10px;align-items:center;margin-bottom:16px}
+.wt-in{
+background:var(–s2);border:1px solid var(–b1);border-radius:10px;
+padding:12px 14px;font-family:var(–FM);font-size:20px;font-weight:700;
+color:var(–tx);width:120px;text-align:center;transition:.2s;
+-webkit-appearance:none;-moz-appearance:textfield;
+}
+.wt-in::-webkit-outer-spin-button,.wt-in::-webkit-inner-spin-button{-webkit-appearance:none}
+.wt-in:focus{outline:none;border-color:var(–a);background:rgba(240,160,48,.04)}
+.wt-unit{font-family:var(–FM);font-size:14px;color:var(–mu)}
+.wt-btn{
+font-family:var(–FM);font-size:10px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;
+padding:12px 18px;border-radius:10px;cursor:pointer;border:1px solid var(–a);
+background:var(–a);color:var(–bg);transition:.2s;-webkit-tap-highlight-color:transparent;
+}
+.wt-btn:hover{background:var(–a2);border-color:var(–a2)}
+.wt-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.wts{background:var(–s2);border:1px solid var(–b1);border-radius:9px;padding:12px;text-align:center}
+.wts-v{font-family:var(–F);font-weight:900;font-size:20px;color:var(–a);letter-spacing:-.5px;line-height:1}
+.wts-l{font-family:var(–FM);font-size:8px;color:var(–mu);text-transform:uppercase;letter-spacing:1px;margin-top:3px}
+.wts-v.pos{color:var(–co)}
+.wts-v.neg{color:var(–gr)}
+
+/* Mini chart */
+.chart-wrap{position:relative;height:80px;margin:4px 0 8px}
+.chart-canvas{width:100%;height:100%;display:block}
+.wt-history{margin-top:12px;max-height:180px;overflow-y:auto}
+.wt-row{
+display:flex;justify-content:space-between;align-items:center;
+padding:8px 0;border-bottom:1px solid rgba(39,35,53,.5);font-size:13px;
+}
+.wt-row:last-child{border-bottom:none}
+.wt-date{color:var(–t2);font-size:12px}
+.wt-val{font-family:var(–FM);font-weight:700;color:var(–a)}
+.wt-diff{font-family:var(–FM);font-size:11px}
+.wt-diff.up{color:var(–co)}
+.wt-diff.dn{color:var(–gr)}
+.wt-del{font-size:14px;color:var(–mu);cursor:pointer;padding:2px 6px;background:none;border:none;transition:.2s}
+.wt-del:hover{color:var(–co)}
+
+/* ════════════════════════════
+PEPTIDE RECHNER
+════════════════════════════ */
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+@media(max-width:480px){.calc-grid{grid-template-columns:1fr}}
+.calc-card{background:var(–s1);border:1px solid var(–b1);border-radius:13px;padding:20px}
+.calc-label{font-family:var(–FM);font-size:9px;color:var(–mu);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
+.calc-inputs{display:flex;gap:8px;align-items:center;margin-bottom:14px}
+.calc-in{
+background:var(–s2);border:1px solid var(–b1);border-radius:8px;
+padding:10px 12px;font-family:var(–FM);font-size:14px;font-weight:700;
+color:var(–tx);width:80px;text-align:center;transition:.2s;
+-webkit-appearance:none;-moz-appearance:textfield;
+}
+.calc-in::-webkit-outer-spin-button,.calc-in::-webkit-inner-spin-button{-webkit-appearance:none}
+.calc-in:focus{outline:none;border-color:var(–a)}
+.calc-x{color:var(–mu);font-family:var(–FM);font-size:12px}
+.calc-results{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cr{background:var(–s2);border:1px solid var(–b1);border-radius:8px;padding:10px 12px}
+.cr-v{font-family:var(–F);font-weight:800;font-size:18px;color:var(–a);letter-spacing:-.5px}
+.cr-l{font-family:var(–FM);font-size:8px;color:var(–mu);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+/* ════════════════════════════
+MAKRO TRACKER
+════════════════════════════ */
+.macro-target{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+@media(max-width:400px){.macro-target{grid-template-columns:repeat(2,1fr)}}
+.mt{background:var(–s1);border:1px solid var(–b1);border-radius:11px;padding:14px;text-align:center}
+.mt-v{font-family:var(–F);font-weight:900;font-size:32px;color:var(–a);letter-spacing:-1.5px;line-height:1}
+.mt-u{font-size:11px;color:var(–mu);margin-top:1px}
+.mt-l{font-family:var(–FM);font-size:8px;color:var(–mu);text-transform:uppercase;letter-spacing:1.2px;margin-top:4px}
+
+.macro-daily{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.md-row{background:var(–s1);border:1px solid var(–b1);border-radius:10px;padding:13px 14px}
+.md-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.md-name{font-size:13px;font-weight:700;color:var(–tx)}
+.md-num{font-family:var(–FM);font-size:12px;color:var(–a)}
+.md-bar{height:5px;background:var(–b1);border-radius:5px;overflow:hidden}
+.md-fill{height:100%;border-radius:5px;transition:width .5s ease}
+.md-inputs{display:flex;gap:8px;margin-top:10px;align-items:center}
+.md-in{
+background:var(–s2);border:1px solid var(–b1);border-radius:7px;
+padding:8px 10px;font-family:var(–FM);font-size:13px;font-weight:700;
+color:var(–tx);width:90px;text-align:center;transition:.2s;
+-webkit-appearance:none;-moz-appearance:textfield;
+}
+.md-in::-webkit-outer-spin-button,.md-in::-webkit-inner-spin-button{-webkit-appearance:none}
+.md-in:focus{outline:none;border-color:var(–a)}
+.md-unit{font-family:var(–FM);font-size:11px;color:var(–mu)}
+.md-reset{
+font-family:var(–FM);font-size:9px;color:var(–mu);background:transparent;
+border:1px solid var(–b1);border-radius:6px;padding:4px 10px;cursor:pointer;
+letter-spacing:1px;text-transform:uppercase;transition:.2s;margin-left:auto;
+}
+.md-reset:hover{color:var(–a);border-color:rgba(240,160,48,.3)}
+
+/* ════════════════════════════
+TIMELINE
+════════════════════════════ */
+.tl{display:flex;flex-direction:column}
+.tl-row{display:grid;grid-template-columns:78px 1fr}
+.tl-l{
+display:flex;flex-direction:column;align-items:flex-end;
+padding:18px 18px 18px 0;border-right:1px solid var(–b1);position:relative;
+}
+.tl-l::before{
+content:’’;position:absolute;right:-5px;top:25px;
+width:8px;height:8px;border-radius:50%;background:var(–a);box-shadow:0 0 8px var(–a);
+}
+.tl-t{font-family:var(–FM);font-size:9px;color:var(–a);letter-spacing:1.5px;text-transform:uppercase;text-align:right}
+.tl-r{padding:16px 0 16px 22px}
+.tl-title{font-family:var(–F);font-weight:800;font-size:14px;margin-bottom:7px;color:var(–tx);letter-spacing:-.3px}
+.tl-items{list-style:none;display:flex;flex-direction:column;gap:4px}
+.tl-items li{font-size:13px;color:var(–t2);padding-left:13px;position:relative;line-height:1.45}
+.tl-items li::before{content:’’;position:absolute;left:0;top:8px;width:4px;height:1px;background:var(–a)}
+.tl-items li strong{color:var(–tx);font-weight:600}
+
+/* ════════════════════════════
+PEPTIDE CARDS
+════════════════════════════ */
+.pep-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media(max-width:520px){.pep-grid{grid-template-columns:1fr}}
+.pep-card{border-radius:13px;border:1px solid var(–b1);background:var(–s1);overflow:hidden;transition:.2s}
+.pep-card:hover{border-color:var(–b2);transform:translateY(-1px)}
+.pep-card.ghk{border-color:rgba(240,160,48,.2)}
+.pep-card.sel{border-color:rgba(167,139,250,.2)}
+.pep-top{padding:20px 20px 14px;border-bottom:1px solid var(–b1)}
+.pep-pill{display:inline-block;font-family:var(–FM);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+.pp-a{background:rgba(240,160,48,.1);color:var(–a);border:1px solid rgba(240,160,48,.2)}
+.pp-p{background:rgba(167,139,250,.1);color:var(–pu);border:1px solid rgba(167,139,250,.2)}
+.pep-name{font-family:var(–F);font-weight:900;font-size:24px;letter-spacing:-.8px;margin-bottom:2px}
+.pep-sub{font-size:11px;color:var(–mu)}
+.pep-stats{display:grid;grid-template-columns:repeat(3,1fr);background:var(–s2);border-bottom:1px solid var(–b1)}
+.pep-stat{padding:11px 13px;border-right:1px solid var(–b1)}
+.pep-stat:last-child{border-right:none}
+.ps-l{font-family:var(–FM);font-size:8px;color:var(–mu);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.ps-v{font-family:var(–F);font-weight:800;font-size:14px;color:var(–tx);letter-spacing:-.3px}
+.ps-v.a{color:var(–a)}.ps-v.p{color:var(–pu)}
+.pep-body{padding:16px 20px}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.tag{font-size:11px;padding:3px 9px;border-radius:5px;border:1px solid var(–b1);color:var(–t2);background:var(–s2)}
+.pep-steps{list-style:none;display:flex;flex-direction:column;gap:6px}
+.pep-steps li{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(–t2);line-height:1.45}
+.sn{width:17px;height:17px;border-radius:5px;flex-shrink:0;font-family:var(–FM);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:2px}
+.sn.a{background:var(–a);color:var(–bg)}.sn.p{background:var(–pu);color:#fff}
+
+/* ════════════════════════════
+TABLE
+════════════════════════════ */
+.tbl-wrap{background:var(–s1);border:1px solid var(–b1);border-radius:12px;overflow:hidden;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:380px}
+thead th{font-family:var(–FM);font-size:9px;font-weight:700;color:var(–mu);letter-spacing:1.5px;text-transform:uppercase;padding:10px 15px;text-align:left;border-bottom:1px solid var(–b1);background:var(–s2)}
+tbody tr{border-bottom:1px solid rgba(39,35,53,.5);transition:background .15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(–s2)}
+tbody td{padding:11px 15px;font-size:13px;vertical-align:middle}
+.sn2{font-weight:700;color:var(–tx)}
+.sd{font-family:var(–FM);font-size:11px;color:var(–a);font-weight:600}
+.sw{font-size:12px;color:var(–mu);line-height:1.4}
+.bdg{display:inline-block;font-family:var(–FM);font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-left:5px;vertical-align:middle}
+.bg{background:rgba(240,160,48,.07);color:var(–a);border:1px solid rgba(240,160,48,.15)}
+.bp{background:rgba(167,139,250,.07);color:var(–pu);border:1px solid rgba(167,139,250,.15)}
+.bc{background:rgba(0,212,200,.07);color:var(–c);border:1px solid rgba(0,212,200,.15)}
+
+/* ════════════════════════════
+SKINCARE
+════════════════════════════ */
+.sk-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.sk-grid{grid-template-columns:1fr}}
+.sk-card{background:var(–s1);border:1px solid var(–b1);border-radius:12px;overflow:hidden}
+.sk-hd{padding:12px 16px;background:var(–s2);border-bottom:1px solid var(–b1);display:flex;align-items:center;justify-content:space-between}
+.sk-t{font-family:var(–F);font-weight:800;font-size:13px}
+.sk-s{font-family:var(–FM);font-size:9px;color:var(–mu);letter-spacing:1px;text-transform:uppercase}
+.sk-steps{list-style:none;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.sk-step{display:flex;align-items:flex-start;gap:10px}
+.sk-n{width:20px;height:20px;border-radius:6px;flex-shrink:0;background:var(–s3);border:1px solid var(–b1);font-family:var(–FM);font-size:9px;color:var(–mu);display:flex;align-items:center;justify-content:center;margin-top:1px}
+.sk-title{font-size:13px;font-weight:700;color:var(–tx)}
+.sk-sub{font-size:11px;color:var(–mu);margin-top:1px;line-height:1.35}
+.sk-note{font-family:var(–FM);font-size:10px;color:var(–a);margin-top:2px}
+
+/* ════════════════════════════
+TRAINING PLAN
+════════════════════════════ */
+.plan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:11px}
+.plan-card{background:var(–s1);border:1px solid var(–b1);border-radius:12px;overflow:hidden;transition:.2s}
+.plan-card:hover{border-color:var(–b2);transform:translateY(-1px)}
+.plan-hd{padding:12px 15px;display:flex;align-items:center;gap:10px;background:var(–s2);border-bottom:1px solid var(–b1)}
+.pbdg{font-family:var(–F);font-weight:900;font-size:11px;letter-spacing:.5px;padding:4px 10px;border-radius:6px;color:var(–bg);flex-shrink:0}
+.pb-a{background:var(–a)}.pb-c{background:var(–c);color:var(–bg)}.pb-p{background:var(–pu)}.pb-o{background:var(–co)}.pb-d{background:var(–mu)}
+.plan-title{font-family:var(–F);font-weight:800;font-size:13px;letter-spacing:-.3px}
+.plan-sub{font-size:10px;color:var(–mu);margin-top:1px}
+.plan-list{list-style:none;padding:11px 15px;display:flex;flex-direction:column}
+.plan-ex{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(39,35,53,.4);font-size:13px}
+.plan-ex:last-child{border-bottom:none}
+.plan-ex-n{color:var(–t2)}
+.plan-ex-r{font-family:var(–FM);font-size:10px;color:var(–mu);white-space:nowrap;margin-left:8px}
+
+/* ════════════════════════════
+TRAINING TRACKER
+════════════════════════════ */
+#tracker{padding:56px 0;border-top:1px solid var(–b1)}
+.day-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:20px}
+.day-btn{
+font-family:var(–FM);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+padding:9px 15px;border-radius:9px;cursor:pointer;
+border:1px solid var(–b1);background:var(–s1);color:var(–mu);transition:.2s;
+-webkit-tap-highlight-color:transparent;
+}
+.day-btn:hover{border-color:var(–b2);color:var(–t2)}
+.day-btn.active{background:var(–a);color:var(–bg);border-color:var(–a);font-weight:900;box-shadow:0 0 18px rgba(240,160,48,.2)}
+
+.session-bar{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:var(–s2);border:1px solid var(–b1);border-radius:11px;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.sbar-name{font-family:var(–F);font-weight:900;font-size:16px;letter-spacing:-.3px}
+.sbar-stats{display:flex;gap:14px;flex-wrap:wrap}
+.ssv{font-family:var(–FM);font-size:11px;color:var(–mu)}
+.ssv strong{color:var(–a);font-size:14px;margin-right:2px}
+
+.ex-list{display:flex;flex-direction:column;gap:8px}
+.ex-card{background:var(–s1);border:1px solid var(–b1);border-radius:12px;overflow:hidden;transition:border-color .2s}
+.ex-card.done{border-color:rgba(240,160,48,.3)}
+.ex-hd{display:flex;align-items:center;padding:0 15px;min-height:52px;gap:11px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+.ex-hd:hover{background:rgba(255,255,255,.02)}
+.ex-idx{width:25px;height:25px;border-radius:7px;flex-shrink:0;background:var(–s3);border:1px solid var(–b1);font-family:var(–FM);font-size:10px;font-weight:700;color:var(–mu);display:flex;align-items:center;justify-content:center}
+.ex-card.done .ex-idx{background:var(–a);color:var(–bg);border-color:var(–a)}
+.ex-name{font-family:var(–F);font-weight:800;font-size:13.5px;letter-spacing:-.3px;flex:1}
+.ex-rec{font-family:var(–FM);font-size:10px;color:var(–mu);flex-shrink:0}
+.ex-dots{display:flex;gap:3px;flex-shrink:0}
+.dot{width:6px;height:6px;border-radius:50%;background:var(–b1);border:1px solid var(–b2);transition:.2s}
+.dot.on{background:var(–a);border-color:var(–a);box-shadow:0 0 5px rgba(240,160,48,.4)}
+.ex-chev{color:var(–mu);font-size:11px;flex-shrink:0;transition:transform .25s}
+.ex-card.open .ex-chev{transform:rotate(180deg)}
+
+.ex-body{display:none;padding:13px 15px 15px;border-top:1px solid var(–b1);background:var(–fa)}
+.ex-card.open .ex-body{display:block}
+.set-hdr{display:grid;grid-template-columns:26px 1fr 1fr 34px;gap:8px;margin-bottom:6px}
+.set-hdr span{font-family:var(–FM);font-size:9px;color:var(–mu);letter-spacing:1px;text-transform:uppercase;text-align:center}
+.set-hdr span:first-child{text-align:left}
+.set-row{display:grid;grid-template-columns:26px 1fr 1fr 34px;gap:8px;align-items:center;margin-bottom:7px}
+.set-n{font-family:var(–FM);font-size:11px;color:var(–mu)}
+.set-in{background:var(–s2);border:1px solid var(–b1);border-radius:7px;padding:9px 7px;font-family:var(–FM);font-size:13px;font-weight:700;color:var(–tx);text-align:center;width:100%;transition:.2s;-webkit-appearance:none;-moz-appearance:textfield}
+.set-in::-webkit-outer-spin-button,.set-in::-webkit-inner-spin-button{-webkit-appearance:none}
+.set-in:focus{outline:none;border-color:var(–a);background:rgba(240,160,48,.03)}
+.set-in::placeholder{color:var(–mu)}
+.set-chk{width:34px;height:34px;border-radius:7px;cursor:pointer;border:1px solid var(–b1);background:var(–s2);display:flex;align-items:center;justify-content:center;font-size:14px;transition:.2s;color:var(–mu);-webkit-tap-highlight-color:transparent}
+.set-chk:hover{border-color:var(–a);color:var(–a)}
+.set-chk.on{background:var(–a);border-color:var(–a);color:var(–bg);font-weight:800}
+.add-set-btn{width:100%;margin-top:5px;padding:9px;background:transparent;border:1px dashed var(–b1);border-radius:8px;cursor:pointer;font-family:var(–FM);font-size:10px;font-weight:700;color:var(–mu);letter-spacing:1px;text-transform:uppercase;transition:.2s;-webkit-tap-highlight-color:transparent}
+.add-set-btn:hover{border-color:var(–a);color:var(–a)}
+
+.note-box{width:100%;background:var(–s1);border:1px solid var(–b1);border-radius:10px;padding:11px 13px;color:var(–tx);font-family:var(–F);font-size:14px;resize:vertical;min-height:64px;margin-top:14px;transition:.2s;-webkit-appearance:none}
+.note-box:focus{outline:none;border-color:var(–b2)}
+.note-box::placeholder{color:var(–mu)}
+
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.btn{font-family:var(–FM);font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:11px 19px;border-radius:9px;cursor:pointer;border:1px solid;transition:.2s;-webkit-tap-highlight-color:transparent}
+.btn-p{background:var(–a);color:var(–bg);border-color:var(–a);box-shadow:0 0 16px rgba(240,160,48,.15)}
+.btn-p:hover{background:var(–a2);border-color:var(–a2)}
+.btn-g{background:transparent;color:var(–t2);border-color:var(–b1)}
+.btn-g:hover{border-color:var(–b2);color:var(–tx)}
+.btn-d{background:transparent;color:var(–co);border-color:rgba(249,112,102,.2)}
+.btn-d:hover{background:rgba(249,112,102,.06)}
+
+/* History */
+.hist-wrap{margin-top:36px}
+.hist-lbl{font-family:var(–FM);font-size:9px;color:var(–mu);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.hist-lbl::after{content:’’;flex:1;height:1px;background:var(–b1)}
+.hist-empty{padding:28px;text-align:center;font-size:13px;color:var(–mu);border:1px dashed var(–b1);border-radius:11px}
+.hist-card{background:var(–s1);border:1px solid var(–b1);border-radius:11px;margin-bottom:9px;overflow:hidden}
+.hist-top{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;border-bottom:1px solid var(–b1);background:var(–s2);flex-wrap:wrap;gap:8px}
+.hist-day{font-family:var(–F);font-weight:900;font-size:13px;letter-spacing:-.3px}
+.hist-meta{font-family:var(–FM);font-size:10px;color:var(–mu);margin-top:1px}
+.hist-vol{font-family:var(–FM);font-size:10px;color:var(–a)}
+.hist-del{font-family:var(–FM);font-size:9px;color:var(–mu);background:transparent;border:1px solid var(–b1);border-radius:5px;padding:3px 8px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;transition:.2s}
+.hist-del:hover{color:var(–co);border-color:rgba(249,112,102,.3)}
+.hist-body{padding:13px 15px;display:flex;flex-direction:column;gap:9px}
+.hex-name{font-size:12.5px;font-weight:700;color:var(–tx);margin-bottom:4px}
+.hex-sets{display:flex;flex-wrap:wrap;gap:4px}
+.hset{font-family:var(–FM);font-size:11px;padding:3px 8px;border-radius:5px;border:1px solid var(–b1);color:var(–mu);background:var(–s2)}
+.hset.on{color:var(–a);background:rgba(240,160,48,.05);border-color:rgba(240,160,48,.18)}
+.hist-note{font-size:12px;color:var(–mu);font-style:italic;margin-top:7px;padding-top:9px;border-top:1px solid var(–b1)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:22px;right:18px;z-index:500;background:var(–s2);border:1px solid var(–a);color:var(–a);font-family:var(–FM);font-size:11px;font-weight:800;letter-spacing:1px;padding:11px 18px;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.5),0 0 16px rgba(240,160,48,.12);transform:translateY(80px);opacity:0;transition:.3s cubic-bezier(.34,1.56,.64,1);max-width:calc(100vw - 36px)}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* ── FINAL ── */
+.final{padding:72px 20px;text-align:center;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(240,160,48,.05) 0%,transparent 60%)}
+.final-t{font-family:var(–F);font-weight:900;font-size:clamp(26px,8vw,56px);line-height:.95;letter-spacing:-2px;margin-bottom:14px}
+.final-t em{font-style:normal;background:linear-gradient(135deg,var(–a),#ffcc60,var(–c));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.final-s{font-family:var(–FM);font-size:10px;color:var(–mu);letter-spacing:3px;text-transform:uppercase}
+footer{background:var(–s1);border-top:1px solid var(–b1);padding:14px 18px;display:flex;justify-content:space-between;font-family:var(–FM);font-size:9px;color:var(–mu);flex-wrap:wrap;gap:8px}
+</style>
+
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">J·STACK</div>
+  <a href="#dashboard">Dashboard</a>
+  <a href="#checklist">Routine</a>
+  <a href="#gewicht">Gewicht</a>
+  <a href="#tagesablauf">Ablauf</a>
+  <a href="#peptide">Peptide</a>
+  <a href="#supplements">Supps</a>
+  <a href="#skincare">Skin</a>
+  <a href="#training">Split</a>
+  <a href="#tracker" class="cl">Tracker</a>
+</nav>
+
+<!-- HERO -->
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-inner wrap">
+    <div class="hero-tag"><span class="pulse"></span>Personal Stack · 2026 · Aktiv</div>
+    <h1>JADEN'S<br><em>STACK.</em></h1>
+    <p class="hero-sub">Training · Peptide · Supplements · Skincare · Ernährung — kein Bullshit, nur was wirklich funktioniert.</p>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-v">18<sup>J</sup></div><div class="hs-l">Alter</div></div>
+      <div class="hs"><div class="hs-v">~100<sup>kg</sup></div><div class="hs-l">Start</div></div>
+      <div class="hs"><div class="hs-v">~82<sup>kg</sup></div><div class="hs-l">Ziel</div></div>
+      <div class="hs"><div class="hs-v">6<sup>Mo</sup></div><div class="hs-l">Laufzeit</div></div>
+      <div class="hs"><div class="hs-v">ULPPL</div><div class="hs-l">Recomp</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ DASHBOARD ══════════════════ -->
+
+<section id="dashboard">
+  <div class="wrap">
+    <div class="sh"><span class="sn">00 —</span><h2 class="st">Dash<span class="ac">board</span></h2></div>
+
+```
+<div class="dash-grid" style="margin-bottom:12px">
+  <!-- Progress Ring -->
+  <div class="ring-card" id="ringCard">
+    <div class="ring-wrap">
+      <svg class="ring-svg" viewBox="0 0 72 72">
+        <circle class="ring-bg" cx="36" cy="36" r="30"/>
+        <circle class="ring-fg" id="ringFg" cx="36" cy="36" r="30" stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+      </svg>
+      <div class="ring-label">
+        <div class="ring-pct" id="ringPct">0%</div>
+        <div class="ring-sub">Done</div>
+      </div>
+    </div>
+    <div class="ring-info">
+      <div class="ring-days" id="ringDays">0</div>
+      <div class="ring-desc">Tage in 180</div>
+      <div class="ring-start" id="ringStart">Start: —</div>
+    </div>
+  </div>
+
+  <!-- Streak -->
+  <div class="streak-card" onclick="logStreak()">
+    <div class="streak-fire">🔥</div>
+    <div class="streak-num" id="streakNum">0</div>
+    <div class="streak-label">Tage Streak</div>
+    <div class="streak-dots" id="streakDots"></div>
+  </div>
+</div>
+
+<!-- Skin Cycling Tracker -->
+<div class="card" style="margin-bottom:12px">
+  <div class="card-hd">
+    <div class="card-title">Skin Cycling</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div class="card-sub" id="cycleNightInfo">Nacht — von 4</div>
+      <button class="chk-reset" onclick="advanceCycle()">Weiter →</button>
+    </div>
+  </div>
+  <div style="padding:14px 16px">
+    <div class="cycle-nights" id="cycleNights"></div>
+    <div class="cycle-info" id="cycleInfo">Wähle die aktuelle Nacht</div>
+  </div>
+</div>
+
+<!-- Peptide Status -->
+<div class="dash-grid-3">
+  <div class="card" style="padding:14px;text-align:center;cursor:pointer" onclick="markPeptide('selank')" id="selankCard">
+    <div style="font-size:22px;margin-bottom:6px">AM</div>
+    <div style="font-family:var(--FM);font-size:10px;font-weight:700;color:var(--pu);letter-spacing:1px">SELANK</div>
+    <div style="font-size:11px;color:var(--mu);margin-top:3px">Morgens</div>
+    <div id="selankStatus" style="font-family:var(--FM);font-size:9px;margin-top:6px;color:var(--mu)">— Ausstehend</div>
+  </div>
+  <div class="card" style="padding:14px;text-align:center;cursor:pointer" onclick="markPeptide('ghkcu')" id="ghkcuCard">
+    <div style="font-size:22px;margin-bottom:6px">PM</div>
+    <div style="font-family:var(--FM);font-size:10px;font-weight:700;color:var(--a);letter-spacing:1px">GHK-CU</div>
+    <div style="font-size:11px;color:var(--mu);margin-top:3px">Abends</div>
+    <div id="ghkcuStatus" style="font-family:var(--FM);font-size:9px;margin-top:6px;color:var(--mu)">— Ausstehend</div>
+  </div>
+  <div class="card" style="padding:14px;text-align:center">
+    <div style="font-size:22px;margin-bottom:6px">💊</div>
+    <div style="font-family:var(--FM);font-size:10px;font-weight:700;color:var(--c);letter-spacing:1px">SUPPS</div>
+    <div style="font-size:11px;color:var(--mu);margin-top:3px">Heute</div>
+    <div id="suppStatus" style="font-family:var(--FM);font-size:9px;margin-top:6px;color:var(--mu);cursor:pointer" onclick="markSupps()">— Ausstehend</div>
+  </div>
+</div>
+
+<!-- Start Date Setter -->
+<div style="margin-top:12px;background:var(--s1);border:1px solid var(--b1);border-radius:11px;padding:14px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+  <div style="font-family:var(--FM);font-size:10px;color:var(--mu);letter-spacing:1px;text-transform:uppercase">Start-Datum setzen</div>
+  <input type="date" id="startDate" style="background:var(--s2);border:1px solid var(--b1);border-radius:7px;padding:8px 11px;color:var(--tx);font-family:var(--FM);font-size:12px;flex:1;min-width:140px" onchange="saveStart()">
+  <button class="btn btn-p" style="padding:8px 16px;font-size:9px" onclick="saveStart()">Setzen</button>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ══════════════════ ROUTINE CHECKLIST ══════════════════ -->
+
+<section id="checklist">
+  <div class="wrap">
+    <div class="sh"><span class="sn">01 —</span><h2 class="st">Tages<span class="ac">routine</span></h2></div>
+
+```
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+  <div style="font-family:var(--FM);font-size:10px;color:var(--mu);letter-spacing:1px;text-transform:uppercase">Heute: <span id="chkDate">—</span></div>
+  <button class="chk-reset" onclick="resetChecklist()">Tag zurücksetzen</button>
+</div>
+<div class="chk-progress"><div class="chk-bar" id="chkBar"></div></div>
+
+<div style="font-family:var(--FM);font-size:9px;color:var(--a);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">AM MORGENS</div>
+<div class="checklist" id="morningList"></div>
+
+<div style="font-family:var(--FM);font-size:9px;color:var(--c);letter-spacing:2px;text-transform:uppercase;margin:18px 0 10px">PM ABENDS</div>
+<div class="checklist" id="eveningList"></div>
+```
+
+  </div>
+</section>
+
+<!-- ══════════════════ GEWICHT ══════════════════ -->
+
+<section id="gewicht">
+  <div class="wrap">
+    <div class="sh c"><span class="sn">02 —</span><h2 class="st">Gewichts<span class="acc">tracker</span></h2></div>
+
+```
+<div class="weight-input-row">
+  <input class="wt-in" type="number" id="wtInput" placeholder="96.0" step="0.1" min="50" max="200">
+  <span class="wt-unit">kg</span>
+  <button class="wt-btn" onclick="logWeight()">Eintragen</button>
+</div>
+
+<div class="wt-stats">
+  <div class="wts"><div class="wts-v" id="wtCurrent">—</div><div class="wts-l">Aktuell</div></div>
+  <div class="wts"><div class="wts-v" id="wtStart2">—</div><div class="wts-l">Start</div></div>
+  <div class="wts"><div class="wts-v" id="wtDiff">—</div><div class="wts-l">Gesamt</div></div>
+</div>
+
+<div class="chart-wrap"><canvas id="wtChart" class="chart-canvas"></canvas></div>
+
+<div class="wt-history" id="wtHistory"></div>
+```
+
+  </div>
+</section>
+
+<!-- ══════════════════ TAGESABLAUF ══════════════════ -->
+
+<section id="tagesablauf">
+  <div class="wrap">
+    <div class="sh"><span class="sn">03 —</span><h2 class="st">Tages<span class="ac">ablauf</span></h2></div>
+    <div class="tl">
+      <div class="tl-row"><div class="tl-l"><span class="tl-t">Morgens</span></div><div class="tl-r"><div class="tl-title">Wake-up Stack</div><ul class="tl-items"><li><strong>Selank Nasal</strong> — 2 Sprays/Seite (≈ 400 mcg), nüchtern</li><li>Cleanser — Gesicht waschen</li><li><strong>Buffet + Copper Peptides</strong> — dünn aufs Gesicht</li><li><strong>Niacinamide 10% + Zinc 1%</strong> — Poren, Talg, Unreinheiten</li><li>Moisturizer — leicht, nicht komedogen</li><li><strong>SPF 50</strong> — immer letzter Schritt</li><li>Supplements: <strong>D3, Omega 3, Vitamin C, Kollagen</strong></li></ul></div></div>
+      <div class="tl-row"><div class="tl-l"><span class="tl-t">Mittag</span></div><div class="tl-r"><div class="tl-title">Hauptmahlzeit</div><ul class="tl-items"><li>Fleisch/Fisch + Reis + Gemüse — Ziel 50–60g Protein</li><li>Mindestens 3 Liter Wasser über den Tag</li></ul></div></div>
+      <div class="tl-row"><div class="tl-l"><span class="tl-t">Pre-WO</span></div><div class="tl-r"><div class="tl-title">Pre-Workout (30 Min. vorher)</div><ul class="tl-items"><li><strong>Kreatin 5g</strong> in Wasser — täglich, auch Rest Days</li><li>Whey — nur wenn letzte Mahlzeit mehr als 3h zurückliegt</li><li>Leichte KH für Energie: Reis, Banane, Hafer</li></ul></div></div>
+      <div class="tl-row"><div class="tl-l"><span class="tl-t">Post-WO</span></div><div class="tl-r"><div class="tl-title">Post-Workout (30–60 Min.)</div><ul class="tl-items"><li><strong>Whey 30–40g</strong> — sofort nach dem Training</li><li>Schnelle KH — Banane, Weißbrot, Reis</li></ul></div></div>
+      <div class="tl-row"><div class="tl-l"><span class="tl-t">Haare</span></div><div class="tl-r"><div class="tl-title">Haarpflege (nach dem Duschen)</div><ul class="tl-items"><li><strong>Multi-Peptide Serum for Hair Density</strong> — Kopfhaut einmassieren, nicht ausspülen</li><li><strong>Skala Mais Cachos</strong> — ins feuchte Haar, definiert Locken</li><li>Kein Rubbeln — Mikrofasertuch oder T-Shirt</li></ul></div></div>
+      <div class="tl-row"><div class="tl-l"><span class="tl-t">Abends</span></div><div class="tl-r"><div class="tl-title">Evening Stack</div><ul class="tl-items"><li><strong>GHK-Cu Nasal</strong> — 2–3 Sprays/Seite (≈ 300 mcg), mind. 4h nach Selank</li><li><strong>Magnesium Glycinat 400mg</strong> — Schlaf, Muskelentspannung</li><li><strong>Ashwagandha 600mg</strong> — Cortisol ↓, Stress, Schlaf</li><li>PM Skincare je nach Cycling-Nacht</li><li>Mindestens 7–8h Schlaf</li></ul></div></div>
+    </div>
+    <div class="callout a"><span class="ci">!</span><p><strong>Timing:</strong> Selank morgens, GHK-Cu abends — mindestens 4h Abstand. Nie gleichzeitig.</p></div>
+  </div>
+</section>
+
+<!-- ══════════════════ PEPTIDE ══════════════════ -->
+
+<section id="peptide">
+  <div class="wrap">
+    <div class="sh"><span class="sn">04 —</span><h2 class="st">Peptide <span class="ac">Stack</span></h2></div>
+
+```
+<div class="pep-grid">
+  <div class="pep-card sel">
+    <div class="pep-top"><div class="pep-pill pp-p">AM Morgens · Nasal</div><div class="pep-name" style="color:var(--pu)">SELANK</div><div class="pep-sub">10 mg Vial · Selbst gemischt</div></div>
+    <div class="pep-stats"><div class="pep-stat"><div class="ps-l">Konz.</div><div class="ps-v p">2 mg/ml</div></div><div class="pep-stat"><div class="ps-l">Pro Spray</div><div class="ps-v">~200 mcg</div></div><div class="pep-stat"><div class="ps-l">Bioverfüg.</div><div class="ps-v p">~92%</div></div></div>
+    <div class="pep-body"><div class="tags"><span class="tag">Anxiolytisch</span><span class="tag">Kognition ↑</span><span class="tag">Stimmung</span><span class="tag">Kein Sucht</span></div><ul class="pep-steps"><li><span class="sn p">1</span>10mg in 5ml Bac-Water = 2mg/ml, langsam an Wand einspritzen</li><li><span class="sn p">2</span>Schwenken, nie schütteln → in Nasal-Flasche</li><li><span class="sn p">3</span>Morgens nüchtern: 2 Sprays/Seite, langsam einatmen</li><li><span class="sn p">4</span>60 Sek. warten, nicht schnäuzen</li></ul></div>
+  </div>
+  <div class="pep-card ghk">
+    <div class="pep-top"><div class="pep-pill pp-a">PM Abends · Nasal</div><div class="pep-name" style="color:var(--a)">GHK-CU</div><div class="pep-sub">50 mg Vial · Selbst gemischt</div></div>
+    <div class="pep-stats"><div class="pep-stat"><div class="ps-l">Konz.</div><div class="ps-v a">10 mg/ml</div></div><div class="pep-stat"><div class="ps-l">Pro Spray</div><div class="ps-v">~100 mcg</div></div><div class="pep-stat"><div class="ps-l">Bioverfüg.</div><div class="ps-v a">~40–60%</div></div></div>
+    <div class="pep-body"><div class="tags"><span class="tag">Kollagen ↑</span><span class="tag">Haut & Haare</span><span class="tag">Neuroprotektion</span><span class="tag">Anti-Aging</span><span class="tag">~4000 Gene</span></div><ul class="pep-steps"><li><span class="sn a">1</span>50mg in 5ml Bac-Water = 10mg/ml, langsam an Wand einspritzen</li><li><span class="sn a">2</span>Schwenken, nie schütteln → in Nasal-Flasche</li><li><span class="sn a">3</span>Abends: 2–3 Sprays/Seite, langsam einatmen</li><li><span class="sn a">4</span>60 Sek. warten, nicht schnäuzen</li></ul></div>
+  </div>
+</div>
+
+<!-- Peptide Rechner -->
+<div style="margin-top:16px">
+  <div style="font-family:var(--FM);font-size:9px;color:var(--mu);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">~ Misch-Rechner</div>
+  <div class="calc-grid">
+    <div class="calc-card">
+      <div class="calc-label">Selank — Vial (mg) / Wasser (ml)</div>
+      <div class="calc-inputs">
+        <input class="calc-in" type="number" id="selMg" value="10" min="1" max="100" oninput="calcPep('sel')">
+        <span class="calc-x">mg /</span>
+        <input class="calc-in" type="number" id="selMl" value="5" min="1" max="20" oninput="calcPep('sel')">
+        <span class="calc-x">ml</span>
+      </div>
+      <div class="calc-results">
+        <div class="cr"><div class="cr-v" id="selConc">2.0</div><div class="cr-l">mg/ml</div></div>
+        <div class="cr"><div class="cr-v" id="selSpray">200</div><div class="cr-l">mcg/Spray</div></div>
+        <div class="cr"><div class="cr-v" id="selDose">2–3</div><div class="cr-l">Sprays/Seite</div></div>
+        <div class="cr"><div class="cr-v" id="selDays">25</div><div class="cr-l">Tage Vorrat</div></div>
+      </div>
+    </div>
+    <div class="calc-card">
+      <div class="calc-label">GHK-Cu — Vial (mg) / Wasser (ml)</div>
+      <div class="calc-inputs">
+        <input class="calc-in" type="number" id="ghkMg" value="50" min="1" max="200" oninput="calcPep('ghk')">
+        <span class="calc-x">mg /</span>
+        <input class="calc-in" type="number" id="ghkMl" value="5" min="1" max="20" oninput="calcPep('ghk')">
+        <span class="calc-x">ml</span>
+      </div>
+      <div class="calc-results">
+        <div class="cr"><div class="cr-v" id="ghkConc">10.0</div><div class="cr-l">mg/ml</div></div>
+        <div class="cr"><div class="cr-v" id="ghkSpray">100</div><div class="cr-l">mcg/Spray</div></div>
+        <div class="cr"><div class="cr-v" id="ghkDose">2–3</div><div class="cr-l">Sprays/Seite</div></div>
+        <div class="cr"><div class="cr-v" id="ghkDays">83</div><div class="cr-l">Tage Vorrat</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tbl-wrap" style="margin-top:14px">
+  <table><thead><tr><th></th><th>Selank</th><th>GHK-Cu</th></tr></thead>
+  <tbody>
+    <tr><td style="color:var(--mu);font-size:12px">Lagerung</td><td style="font-size:13px;color:var(--t2)">Kühlschrank 2–8°C</td><td style="font-size:13px;color:var(--t2)">Kühlschrank 2–8°C</td></tr>
+    <tr><td style="color:var(--mu);font-size:12px">Haltbarkeit</td><td style="font-size:13px;color:var(--t2)">4–6 Wochen</td><td style="font-size:13px;color:var(--t2)">4–6 Wochen</td></tr>
+    <tr><td style="color:var(--mu);font-size:12px">Zeitpunkt</td><td style="font-size:13px;color:var(--t2)">Morgens, nüchtern</td><td style="font-size:13px;color:var(--t2)">Abends, 4h+ nach Selank</td></tr>
+  </tbody></table>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ══════════════════ SUPPLEMENTS ══════════════════ -->
+
+<section id="supplements">
+  <div class="wrap">
+    <div class="sh"><span class="sn">05 —</span><h2 class="st">Supple<span class="ac">ments</span></h2></div>
+    <div class="tbl-wrap">
+      <table><thead><tr><th>Supplement</th><th>Dosis</th><th>Wann</th><th>Warum</th></tr></thead>
+      <tbody>
+        <tr><td><span class="sn2">Whey Protein</span><span class="bdg bg">Core</span></td><td><span class="sd">30–40g</span></td><td style="font-size:12px;color:var(--t2)">Post-WO</td><td><span class="sw">Muskelaufbau, Proteinziel</span></td></tr>
+        <tr><td><span class="sn2">Kreatin Monohydrat</span><span class="bdg bg">Core</span></td><td><span class="sd">5g/Tag</span></td><td style="font-size:12px;color:var(--t2)">Pre-WO</td><td><span class="sw">Kraft ↑, ATP, auch Rest Days</span></td></tr>
+        <tr><td><span class="sn2">Vitamin D3</span><span class="bdg bg">Core</span></td><td><span class="sd">3.500 IE jeden 2. Tag</span></td><td style="font-size:12px;color:var(--t2)">Morgens</td><td><span class="sw">Testosteron, Immunsystem</span></td></tr>
+        <tr><td><span class="sn2">Omega 3 (EPA+DHA)</span><span class="bdg bg">Core</span></td><td><span class="sd">2–3g</span></td><td style="font-size:12px;color:var(--t2)">Morgens</td><td><span class="sw">Anti-inflam., Herzgesundheit</span></td></tr>
+        <tr><td><span class="sn2">Magnesium Glycinat</span><span class="bdg bg">Core</span></td><td><span class="sd">400mg</span></td><td style="font-size:12px;color:var(--t2)">Abends</td><td><span class="sw">Schlaf, Muskelentspannung</span></td></tr>
+        <tr><td><span class="sn2">Ashwagandha KSM-66</span><span class="bdg bp">Adaptogen</span></td><td><span class="sd">600mg</span></td><td style="font-size:12px;color:var(--t2)">Abends</td><td><span class="sw">Cortisol ↓, Schlaf, Stress</span></td></tr>
+        <tr><td><span class="sn2">Vitamin C</span><span class="bdg bc">Optional</span></td><td><span class="sd">500–1000mg</span></td><td style="font-size:12px;color:var(--t2)">Morgens</td><td><span class="sw">Kollagensynthese, Immunsystem</span></td></tr>
+        <tr><td><span class="sn2">Kollagen Peptide</span><span class="bdg bc">Optional</span></td><td><span class="sd">10g</span></td><td style="font-size:12px;color:var(--t2)">Morgens</td><td><span class="sw">Haut, Gelenke, GHK-Cu Synergie</span></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ SKINCARE ══════════════════ -->
+
+<section id="skincare">
+  <div class="wrap">
+    <div class="sh"><span class="sn">06 —</span><h2 class="st">Skin<span class="ac">care</span></h2></div>
+    <div class="sk-grid">
+      <div class="sk-card">
+        <div class="sk-hd"><div class="sk-t">AM — Morgens</div><div class="sk-s">Schutz & Hydration</div></div>
+        <ul class="sk-steps">
+          <li class="sk-step"><div class="sk-n">1</div><div><div class="sk-title">Cleanser</div><div class="sk-sub">CeraVe Foaming / La Roche-Posay Toleriane</div></div></li>
+          <li class="sk-step"><div class="sk-n">2</div><div><div class="sk-title">Buffet + Copper Peptides</div><div class="sk-sub">The Ordinary — dünn, einziehen lassen</div><div class="sk-note">Synergie mit GHK-Cu Nasal</div></div></li>
+          <li class="sk-step"><div class="sk-n">3</div><div><div class="sk-title">Niacinamide 10% + Zinc 1%</div><div class="sk-sub">Poren, Talgkontrolle, Rötungen</div></div></li>
+          <li class="sk-step"><div class="sk-n">4</div><div><div class="sk-title">Moisturizer</div><div class="sk-sub">Leicht, nicht komedogen</div></div></li>
+          <li class="sk-step"><div class="sk-n">5</div><div><div class="sk-title">SPF 50</div><div class="sk-sub">Immer letzter Schritt — UV macht Retinol wirkungslos</div></div></li>
+        </ul>
+      </div>
+      <div class="sk-card">
+        <div class="sk-hd"><div class="sk-t">PM — Skin Cycling</div><div class="sk-s">Regeneration</div></div>
+        <ul class="sk-steps">
+          <li class="sk-step"><div class="sk-n">1</div><div><div class="sk-title">Cleanser</div><div class="sk-sub">Gründlich — SPF, Staub, Sebum entfernen</div></div></li>
+          <li class="sk-step"><div class="sk-n">2a</div><div><div class="sk-title">Retinol 1% <span style="color:var(--a);font-family:var(--FM);font-size:10px">· N1 & N2</span></div><div class="sk-sub">The Ordinary — Anti-Aging, Textur</div><div class="sk-note">Erbsengroße Menge reicht</div></div></li>
+          <li class="sk-step"><div class="sk-n">2b</div><div><div class="sk-title">Buffet + Copper <span style="color:var(--pu);font-family:var(--FM);font-size:10px">· N3 & N4</span></div><div class="sk-sub">Recovery — nie mit Retinol mixen</div></div></li>
+          <li class="sk-step"><div class="sk-n">3</div><div><div class="sk-title">Moisturizer</div><div class="sk-sub">Abends reichhaltiger OK</div></div></li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout w" style="margin-top:12px"><span class="ci">!</span><p><strong>Skin Cycling:</strong> N1 Retinol → N2 Retinol → N3 Buffet → N4 Buffet → von vorne. Nie mixen.</p></div>
+  </div>
+</section>
+
+<!-- ══════════════════ TRAINING ══════════════════ -->
+
+<section id="training">
+  <div class="wrap">
+    <div class="sh"><span class="sn">07 —</span><h2 class="st">ULPPL <span class="aco">Recomp</span></h2></div>
+    <div style="font-family:var(--FM);font-size:9px;color:var(--mu);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px">Mo / Di / Do / Fr / Sa · Mi + So Rest</div>
+    <div class="plan-grid">
+      <div class="plan-card"><div class="plan-hd"><div class="pbdg pb-a">MO</div><div><div class="plan-title">UPPER — Oberkörper + Arme</div><div class="plan-sub">Brust · Rücken · Schulter · Arme</div></div></div><ul class="plan-list"><li class="plan-ex"><span class="plan-ex-n">Incline DB Press</span><span class="plan-ex-r">3×5–8</span></li><li class="plan-ex"><span class="plan-ex-n">Chest-Supported Row</span><span class="plan-ex-r">3×6–10</span></li><li class="plan-ex"><span class="plan-ex-n">Machine Shoulder Press</span><span class="plan-ex-r">3×6–10</span></li><li class="plan-ex"><span class="plan-ex-n">Cable Lateral Raise</span><span class="plan-ex-r">3×10–15</span></li><li class="plan-ex"><span class="plan-ex-n">Incline DB Curl</span><span class="plan-ex-r">3×6–10</span></li><li class="plan-ex"><span class="plan-ex-n">Overhead Cable Tricep Ext.</span><span class="plan-ex-r">3×8–12</span></li></ul></div>
+      <div class="plan-card"><div class="plan-hd"><div class="pbdg pb-c">DI</div><div><div class="plan-title">LOWER — Quad · Ham · Waden</div><div class="plan-sub">Kompakt, fokussiert</div></div></div><ul class="plan-list"><li class="plan-ex"><span class="plan-ex-n">Hack Squat</span><span class="plan-ex-r">3×5–8</span></li><li class="plan-ex"><span class="plan-ex-n">Romanian Deadlift</span><span class="plan-ex-r">3×6–8</span></li><li class="plan-ex"><span class="plan-ex-n">Seated Leg Curl</span><span class="plan-ex-r">3×8–12</span></li><li class="plan-ex"><span class="plan-ex-n">Standing Calf Raise</span><span class="plan-ex-r">3×10–15</span></li></ul></div>
+      <div class="plan-card"><div class="plan-hd"><div class="pbdg pb-d">MI</div><div><div class="plan-title">REST</div><div class="plan-sub">Aktive Erholung</div></div></div><ul class="plan-list"><li class="plan-ex"><span class="plan-ex-n">Spazieren / Dehnen</span><span class="plan-ex-r">20–30 Min</span></li><li class="plan-ex"><span class="plan-ex-n">Kreatin weiter</span><span class="plan-ex-r">5g</span></li></ul></div>
+      <div class="plan-card"><div class="plan-hd"><div class="pbdg pb-o">DO</div><div><div class="plan-title">PUSH — Brust · Schulter · Tri</div><div class="plan-sub">Drückende Muskelketten</div></div></div><ul class="plan-list"><li class="plan-ex"><span class="plan-ex-n">Flat DB Press</span><span class="plan-ex-r">3×5–8</span></li><li class="plan-ex"><span class="plan-ex-n">Machine Shoulder Press</span><span class="plan-ex-r">3×6–10</span></li><li class="plan-ex"><span class="plan-ex-n">Cable Fly (mittlere Höhe)</span><span class="plan-ex-r">3×10–12</span></li><li class="plan-ex"><span class="plan-ex-n">Lateral Raise Machine</span><span class="plan-ex-r">3×10–15</span></li><li class="plan-ex"><span class="plan-ex-n">Overhead Cable Tricep Ext.</span><span class="plan-ex-r">3×8–12</span></li><li class="plan-ex"><span class="plan-ex-n">Triceps Pushdown (Seil)</span><span class="plan-ex-r">3×8–12</span></li></ul></div>
+      <div class="plan-card"><div class="plan-hd"><div class="pbdg pb-a">FR</div><div><div class="plan-title">PULL — Rücken · Rear · Bi</div><div class="plan-sub">Ziehende Muskelketten</div></div></div><ul class="plan-list"><li class="plan-ex"><span class="plan-ex-n">Lat Pulldown (breit)</span><span class="plan-ex-r">3×6–10</span></li><li class="plan-ex"><span class="plan-ex-n">Cable Row (enger Griff)</span><span class="plan-ex-r">3×6–10</span></li><li class="plan-ex"><span class="plan-ex-n">Cable Pullover</span><span class="plan-ex-r">3×10–12</span></li><li class="plan-ex"><span class="plan-ex-n">Reverse Pec Deck</span><span class="plan-ex-r">3×12–15</span></li><li class="plan-ex"><span class="plan-ex-n">Preacher Curl</span><span class="plan-ex-r">3×6–10</span></li><li class="plan-ex"><span class="plan-ex-n">Hammer Curl</span><span class="plan-ex-r">3×8–10</span></li></ul></div>
+      <div class="plan-card"><div class="plan-hd"><div class="pbdg pb-c">SA</div><div><div class="plan-title">LEGS — Glutes · Ham · Core</div><div class="plan-sub">Hintere Kette + Mitte</div></div></div><ul class="plan-list"><li class="plan-ex"><span class="plan-ex-n">Bulgarian Split Squat</span><span class="plan-ex-r">3×6–8</span></li><li class="plan-ex"><span class="plan-ex-n">Hip Thrust</span><span class="plan-ex-r">3×6–8</span></li><li class="plan-ex"><span class="plan-ex-n">Lying Leg Curl</span><span class="plan-ex-r">3×8–12</span></li><li class="plan-ex"><span class="plan-ex-n">Seated Calf Raise</span><span class="plan-ex-r">3×10–15</span></li><li class="plan-ex"><span class="plan-ex-n">Cable Crunch</span><span class="plan-ex-r">3×12–15</span></li></ul></div>
+      <div class="plan-card"><div class="plan-hd"><div class="pbdg pb-d">SO</div><div><div class="plan-title">REST</div><div class="plan-sub">Aktive Erholung</div></div></div><ul class="plan-list"><li class="plan-ex"><span class="plan-ex-n">Regeneration</span><span class="plan-ex-r">—</span></li><li class="plan-ex"><span class="plan-ex-n">Schlaf Priorität</span><span class="plan-ex-r">7–8h+</span></li></ul></div>
+    </div>
+    <div class="callout c" style="margin-top:14px"><span class="ci">💡</span><p><strong>Progression:</strong> Alle Wdh. im oberen Bereich sauber? → nächste Session mehr Gewicht. Tracker unten nutzen.</p></div>
+  </div>
+</section>
+
+<!-- ══════════════════ MAKROS ══════════════════ -->
+
+<section id="ernaehrung">
+  <div class="wrap">
+    <div class="sh"><span class="sn">08 —</span><h2 class="st">Makros & <span class="ac">Ernährung</span></h2></div>
+    <div class="macro-target">
+      <div class="mt"><div class="mt-v">2800</div><div class="mt-u">kcal</div><div class="mt-l">Ziel/Tag</div></div>
+      <div class="mt"><div class="mt-v">180</div><div class="mt-u">g</div><div class="mt-l">Protein</div></div>
+      <div class="mt"><div class="mt-v">340</div><div class="mt-u">g</div><div class="mt-l">Carbs</div></div>
+      <div class="mt"><div class="mt-v">80</div><div class="mt-u">g</div><div class="mt-l">Fett</div></div>
+    </div>
+
+```
+<!-- Daily Macro Tracker -->
+<div style="font-family:var(--FM);font-size:9px;color:var(--mu);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">
+  <span>Tagesfortschritt</span>
+  <button class="md-reset" onclick="resetMacros()">Reset</button>
+</div>
+<div class="macro-daily" id="macroDailyList"></div>
+
+<div class="callout a"><span class="ci">🔑</span><p><strong>180g Protein ist Pflicht.</strong> Ohne ausreichend Protein kein Aufbau — egal wie gut das Training ist.</p></div>
+```
+
+  </div>
+</section>
+
+<!-- ══════════════════ TRAINING TRACKER ══════════════════ -->
+
+<div id="tracker">
+  <div class="wrap">
+    <div class="sh c" style="margin-top:0;padding-top:56px"><span class="sn">09 —</span><h2 class="st">Training <span class="acc">Tracker</span></h2></div>
+    <p style="font-size:13px;color:var(--t2);margin-bottom:20px;margin-top:-18px">Tracke Sätze, Gewichte, Wiederholungen. Alles lokal gespeichert.</p>
+
+```
+<div class="day-tabs" id="dayTabs"></div>
+<div class="session-bar" id="sessionBar">
+  <div><div class="sbar-name" id="sName">Wähle einen Tag</div><div style="font-size:11px;color:var(--mu);margin-top:2px" id="sSub">—</div></div>
+  <div class="sbar-stats">
+    <div class="ssv"><strong id="sDone">0</strong>✓</div>
+    <div class="ssv"><strong id="sTotal">0</strong> Sätze</div>
+    <div class="ssv"><strong id="sVol">0</strong> kg</div>
+  </div>
+</div>
+<div class="ex-list" id="exList"></div>
+<textarea class="note-box" id="noteBox" placeholder="Session-Notiz: Energie, Gewicht, was gut lief…"></textarea>
+<div class="actions">
+  <button class="btn btn-p" onclick="save()">Speichern</button>
+  <button class="btn btn-g" onclick="resetTracker()">Reset</button>
+  <button class="btn btn-d" onclick="nuke()">History löschen</button>
+</div>
+<div class="hist-wrap">
+  <div class="hist-lbl">Vergangene Sessions</div>
+  <div id="histArea"></div>
+</div>
+```
+
+  </div>
+</div>
+
+<!-- FINAL -->
+
+<div class="final">
+  <div class="final-t">6 Monate.<br>Kein Tag.<br><em>Nicht wiederzuerkennen.</em></div>
+  <div class="final-s">Train · Eat · Rest · Repeat</div>
+</div>
+
+<footer>
+  <div>Jaden — Personal Stack 2026 · v6</div>
+  <div>Fully Offline · No External Dependencies</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════ DATA ══════════════════ */
+const DAYS=[
+  {id:'upper',label:'MO – UPPER',sub:'Ganzer Oberkörper + Arme',exercises:[
+    {n:'Incline DB Press',r:'3×5–8'},{n:'Chest-Supported Row',r:'3×6–10'},
+    {n:'Machine Shoulder Press',r:'3×6–10'},{n:'Cable Lateral Raise',r:'3×10–15'},
+    {n:'Incline DB Curl',r:'3×6–10'},{n:'Overhead Cable Tricep Extension',r:'3×8–12'},{n:'Reverse Pec Deck',r:'2×12–15'},
+  ]},
+  {id:'lower',label:'DI – LOWER',sub:'Quad · Hamstring · Waden',exercises:[
+    {n:'Hack Squat',r:'3×5–8'},{n:'Romanian Deadlift',r:'3×6–8'},
+    {n:'Seated Leg Curl',r:'3×8–12'},{n:'Standing Calf Raise',r:'3×10–15'},
+  ]},
+  {id:'push',label:'DO – PUSH',sub:'Brust · Schulter · Trizeps',exercises:[
+    {n:'Flat DB Press',r:'3×5–8'},{n:'Machine Shoulder Press',r:'3×6–10'},
+    {n:'Cable Fly (mittlere Höhe)',r:'3×10–12'},{n:'Lateral Raise Machine',r:'3×10–15'},
+    {n:'Overhead Cable Tricep Extension',r:'3×8–12'},{n:'Reverse Pec Deck',r:'2×12–15'},{n:'Triceps Pushdown (Seil)',r:'3×8–12'},
+  ]},
+  {id:'pull',label:'FR – PULL',sub:'Rücken · Rear Delts · Bizeps',exercises:[
+    {n:'Lat Pulldown (breit)',r:'3×6–10'},{n:'Cable Row (enger Griff)',r:'3×6–10'},
+    {n:'Cable Pullover',r:'3×10–12'},{n:'Reverse Pec Deck',r:'3×12–15'},
+    {n:'Preacher Curl',r:'3×6–10'},{n:'Hammer Curl',r:'3×8–10'},
+  ]},
+  {id:'legs',label:'SA – LEGS',sub:'Glutes · Hamstring · Core',exercises:[
+    {n:'Bulgarian Split Squat',r:'3×6–8'},{n:'Hip Thrust',r:'3×6–8'},
+    {n:'Lying Leg Curl',r:'3×8–12'},{n:'Seated Calf Raise',r:'3×10–15'},
+    {n:'Cable Crunch',r:'3×12–15'},
+  ]},
+];
+
+const MORNING_CHECKS=[
+  {id:'selank',title:'Selank Nasal',sub:'2 Sprays/Seite · nüchtern'},
+  {id:'cleanser_am',title:'Cleanser',sub:'Gesicht waschen'},
+  {id:'buffet',title:'Buffet + Copper Peptides',sub:'Dünn aufs Gesicht'},
+  {id:'niacinamide',title:'Niacinamide 10% + Zinc',sub:'Poren & Talg'},
+  {id:'moisturizer_am',title:'Moisturizer',sub:'Leicht, nicht komedogen'},
+  {id:'spf',title:'SPF 50',sub:'Immer, auch bei Bewölkung'},
+  {id:'d3',title:'D3 + Omega 3 + Vitamin C',sub:'Morgen-Supplements'},
+  {id:'kreatin',title:'Kreatin 5g',sub:'In Wasser — auch Rest Days'},
+  {id:'haarserum',title:'Hair Density Serum',sub:'Kopfhaut einmassieren (nach Duschen)'},
+];
+const EVENING_CHECKS=[
+  {id:'ghkcu',title:'GHK-Cu Nasal',sub:'2–3 Sprays/Seite · mind. 4h nach Selank'},
+  {id:'magnesium',title:'Magnesium Glycinat 400mg',sub:'Abends, 1h vor Schlaf'},
+  {id:'ashwa',title:'Ashwagandha 600mg',sub:'Mit Magnesium'},
+  {id:'cleanser_pm',title:'Cleanser PM',sub:'Gründlich reinigen'},
+  {id:'retinol_buffet',title:'Retinol / Buffet',sub:'Je nach Skin Cycling Nacht'},
+  {id:'moisturizer_pm',title:'Moisturizer PM',sub:'Reichhaltiger als morgens'},
+];
+
+const MACROS={kcal:2800,protein:180,carbs:340,fat:80};
+
+/* ══════════════════ STORAGE ══════════════════ */
+function gl(k){try{return JSON.parse(localStorage.getItem(k))||null}catch{return null}}
+function sl(k,v){localStorage.setItem(k,JSON.stringify(v))}
+
+/* ══════════════════ INIT ══════════════════ */
+window.addEventListener('load',()=>{
+  initDashboard();
+  initChecklist();
+  initWeight();
+  initMacros();
+  initTracker();
+  calcPep('sel');calcPep('ghk');
+  setDateDisplay();
+});
+
+/* ══════════════════ DASHBOARD ══════════════════ */
+function initDashboard(){
+  const sd=gl('startDate');
+  if(sd){
+    document.getElementById('startDate').value=sd;
+    updateRing(sd);
+  }
+  initStreak();
+  initCycle();
+  updatePeptideCards();
+  updateSuppCard();
+}
+
+function saveStart(){
+  const v=document.getElementById('startDate').value;
+  if(!v)return;
+  sl('startDate',v);
+  updateRing(v);
+  toast('✓ Startdatum gesetzt');
+}
+
+function updateRing(startStr){
+  const start=new Date(startStr);
+  const now=new Date();
+  const days=Math.max(0,Math.floor((now-start)/(1000*60*60*24)));
+  const total=180;
+  con
